@@ -3,40 +3,32 @@ import time
 # SubSet Sum Knapsack
 
 #Returns the maximum value that can be stored by the bag
-def subsetSum(W, wt, val, n):
+def subsetSum(set, n, S):
 
-    K = [[0 for x in range(W+1)] for x in range(n+1)]
+    K = [[False for i in range(S+1)] for i in range (n+1)]
 
     for i in range(n+1):
-        for w in range(W+1):
-            if i == 0 or w == 0:
-                K[i][w] = 0
-            elif wt[i-1] <= w:
-                K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]], K[i-1][w])
+        K[i][0] = True
+
+    for i in range(1,n+1):
+        # i is iterating over the indexes of elements
+        for j in range(1,S+1):
+            # j is iterating over values of S
+            if set[i-1] > j:
+            # Don't include
+                K[i][j] = K[i-1][j]
             else:
-                K[i][w] = K[i-1][w]
-    return K[n][W]
+                # Check both case where include or not and if either of them is True
+                K[i][j] = K[i-1][j] or K[i-1][j-set[i-1]]
+    return K[n][S]
 
 if __name__ == "__main__":
-    # Without Memoization
-    values = [50,100,150,200,50,100,150,200,50,100,150,200,50,100,150,200,50,100,150,200]
-    weights = [8,16,32,40,8,16,32,40,8,16,32,40,8,16,32,40,8,16,32,40]
-    W = 200
-    index = len(weights)
-    # Call Function
-    start1 = time.time()
-    b = knapSack(weights, values, W, index)
-    end1 = time.time()
-    print("Time elapsed without Memoization:{}".format(end1-start1))
 
-    # With Memoization
-    val = [50,100,150,200,50,100,150,200,50,100,150,200,50,100,150,200,50,100,150,200]
     wt = [8,16,32,40,8,16,32,40,8,16,32,40,8,16,32,40,8,16,32,40]
-    W = 200
-    n = len(val)
-    start2 = time.time()
-    a = knapSackDyn(W, wt, val, n)
-    end2 = time.time()
-    print("Time elapsed with Memoization:{}".format(end2-start2))
-
-    print("Memoized code is {} times faster, than Non-Memoized code".format( str(round( ((end1-start1) / (end2-start2) ),2))))
+    S = 200
+    n = len(wt)
+    start = time.time()
+    a = subsetSum(wt, n, S)
+    end = time.time()
+    # print("Time elapsed with Memoization:{}".format(end-start))
+    print(a)
