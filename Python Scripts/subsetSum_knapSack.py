@@ -7,6 +7,7 @@ def subsetSum(set, n, S):
 
     K = [[False for i in range(S+1)] for i in range (n+1)]
 
+    # If sum is 0, then answer is True
     for i in range(n+1):
         K[i][0] = True
 

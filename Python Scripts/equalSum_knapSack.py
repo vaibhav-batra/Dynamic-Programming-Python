@@ -3,7 +3,7 @@ import time
 # SubSet Sum Knapsack
 
 
-def subsetSum(set, n):
+def equalSum(set, n):
 
     sum = 0
 
@@ -15,11 +15,15 @@ def subsetSum(set, n):
     if sum%2!=0:
         return False
 
-    K = [[-1 for i in range(int(sum/2)+1)] for i in range (n)]
+    K = [[False  for i in range(int(sum/2)+1)] for i in range (n+1)]
 
-    for i in range(1,n):
+    # If sum is 0, then answer is True
+    for i in range(1, n+1):
+        K[i][0] = True
+
+    for i in range(1,n+1):
         # i is iterating over the indexes of elements
-        for j in range(1,(int(sum)/2)+1):
+        for j in range(1,(int(sum/2)+1)):
             # j is iterating over values of S
             if set[i-1] > j:
             # Don't include
@@ -27,14 +31,15 @@ def subsetSum(set, n):
             else:
                 # Check both case where include or not and if either of them is True
                 K[i][j] = K[i-1][j] or K[i-1][j-set[i-1]]
-    return K[n][S]
+    return K[n][int(sum/2)]
 
 if __name__ == "__main__":
 
-    wt = [1,5,5,11]
+    wt = [1,5,5,3]
     n = len(wt)
     start = time.time()
-    a = subsetSum(wt, n, S)
+
+    a = equalSum(wt, n)
     end = time.time()
     # print("Time elapsed with Memoization:{}".format(end-start))
     print(a)
